@@ -1,7 +1,3 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-
-### Java template
 # Compiled class file
 *.class
 
@@ -31,12 +27,6 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
-
-
-.gitignore
+target
 .idea/
-pom.xml
-src/
-wechat-java-common/
-wechat-java-ps/
 wechat-java.iml
