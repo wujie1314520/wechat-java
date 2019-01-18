@@ -40,6 +40,15 @@ public class WechatPSInMemoryConfigImpl implements WechatPSConfigStorage {
     }
 
     @Override
+    public boolean getAccessTokenRedisLock() {
+        return false;
+    }
+
+    @Override
+    public void unlock() {
+    }
+
+    @Override
     public boolean isAccessTokenExpired() {
         return System.currentTimeMillis() > this.expiresTime;
     }

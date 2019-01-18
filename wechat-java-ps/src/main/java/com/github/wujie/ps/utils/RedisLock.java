@@ -9,20 +9,20 @@ import redis.clients.jedis.JedisPool;
  * redis分布式锁,采用双重防死锁
  */
 @Slf4j
-public class RedisLockUtil {
-    private static RedisLockUtil mInstance = null;
+public class RedisLock {
+    private static RedisLock mInstance = null;
 
     private final JedisPool jedisPool;
 
-    private RedisLockUtil(JedisPool jedisPool) {
+    private RedisLock(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 
-    public static RedisLockUtil getInstance(JedisPool jedisPool) {
+    public static RedisLock getInstance(JedisPool jedisPool) {
         if(mInstance == null) {
-            synchronized (RedisLockUtil.class) {
+            synchronized (RedisLock.class) {
                 if(mInstance == null) {
-                    mInstance = new RedisLockUtil(jedisPool);
+                    mInstance = new RedisLock(jedisPool);
                 }
             }
         }

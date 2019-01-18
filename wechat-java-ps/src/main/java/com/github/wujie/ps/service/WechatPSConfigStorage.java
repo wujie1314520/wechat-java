@@ -15,6 +15,10 @@ public interface WechatPSConfigStorage {
 
     Lock getAccessTokenLock();
 
+    boolean getAccessTokenRedisLock();
+
+    void unlock();
+
     boolean isAccessTokenExpired();
 
     /**

@@ -1,6 +1,6 @@
 package com.github.wujie.ps.service.impl;
 
-import com.github.wujie.ps.utils.RedisLockUtil;
+import com.github.wujie.ps.utils.RedisLock;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -22,6 +22,7 @@ public class WechatPSInRedisConfigImpl extends WechatPSInMemoryConfigImpl {
 
     private String accessTokenKey;
     private String accessTokenLockKey;
+    private RedisLock lock;
 
     public WechatPSInRedisConfigImpl(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
@@ -67,23 +68,43 @@ public class WechatPSInRedisConfigImpl extends WechatPSInMemoryConfigImpl {
         return result != null && result < 0;
     }
 
+    public boolean getAccessTokenRedisLock() {
+        //分布式锁
+        this.lock = RedisLock.getInstance(this.jedisPool);
+        return this.lock.lock(this.accessTokenLockKey, LOCKTIMEOUT);
+    }
+
+    public void unlock() {
+        this.lock.unlock(this.accessTokenLockKey); //释放锁
+    }
+
     @Override
     public synchronized void updateAccessToken(String accessToken, int expiresInSeconds) {
         //分布式锁
-        RedisLockUtil lock = RedisLockUtil.getInstance(this.jedisPool);
-        //抢到锁才能更改
-        if(lock.lock(this.accessTokenLockKey, LOCKTIMEOUT)) {
-            Jedis jedis = null;
-            try {
+//        RedisLock lock = RedisLock.getInstance(this.jedisPool);
+//        //抢到锁才能更改
+//        if(lock.lock(this.accessTokenLockKey, LOCKTIMEOUT)) {
+//            Jedis jedis = null;
+//            try {
+//                jedis = this.jedisPool.getResource();
+//                jedis.setex(this.accessTokenKey, expiresInSeconds - 200, accessToken);
+//                lock.unlock(this.accessTokenLockKey); //释放锁
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                jedis.close();
+//            }
+//        }
+
+        Jedis jedis = null;
+        try {
                 jedis = this.jedisPool.getResource();
                 jedis.setex(this.accessTokenKey, expiresInSeconds - 200, accessToken);
-                lock.unlock(this.accessTokenLockKey); //释放锁
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 jedis.close();
             }
-        }
     }
 
     @Override

@@ -46,6 +46,7 @@ public class WechatPSServiceImpl implements WechatPSService {
         return getAccessToken(false);
     }
 
+    //单机版
     @Override
     public String getAccessToken(boolean forceRefresh) throws WechatErrorException {
         Lock lock = getWechatPSConfigStorage().getAccessTokenLock();
@@ -53,6 +54,7 @@ public class WechatPSServiceImpl implements WechatPSService {
             lock.lock();
 
             if (getWechatPSConfigStorage().isAccessTokenExpired() || forceRefresh) {
+
                 String url = String.format(WechatPSService.GET_ACCESS_TOKEN_URL,
                         getWechatPSConfigStorage().getAppId(), getWechatPSConfigStorage().getSecret());
 
