@@ -19,7 +19,7 @@ import java.util.concurrent.locks.Lock;
 @Slf4j
 public class WechatPSAdServiceImpl extends WechatPSServiceImpl {
 
-    //单机版
+    //分布式
     @Override
     public String getAccessToken(boolean forceRefresh) throws WechatErrorException {
         Lock lock = getWechatPSConfigStorage().getAccessTokenLock();
