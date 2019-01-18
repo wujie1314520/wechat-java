@@ -1,10 +1,6 @@
 # wechat-java
 微信开发 Java SDK，支持包括公众号、小程序、微信支付、开放平台的后端开发
-## 注意：分布式环境下，accessToken获取和更新尽量放在一台中控服务器上，一定要避免各个业务逻辑点各自刷新accessToken,
-## 这样会反复导致accessToken重复刷新，过期问题。比如有这样一个业务场景：我们部署了10台服务器，每台服务器都可以刷新accessToken。
-## 当每个点accessToken过期时，并发量过来，有5台服务器同时发现redis过期，去刷新accessToken，这样会导致token反复过期。
-## 如果不采用中控服务器，可以在发现accessToken过期时，采用分布式锁，保证只有一个业务点去刷新accessToken。
-## 使用, 比如获取accessToken
+## 注意：分布式环境下，accessToken获取和更新尽量放在一台中控服务器上，一定要避免各个业务逻辑点各自刷新accessToken,这样会反复导致accessToken重复刷新，过期问题。比如有这样一个业务场景：我们部署了10台服务器，每台服务器都可以刷新accessToken。当每个点accessToken过期时，并发量过来，有5台服务器同时发现redis过期，去刷新accessToken，这样会导致token反复过期。如果不采用中控服务器，可以在发现accessToken过期时，采用分布式锁，保证只有一个业务点去刷新accessToken。使用, 比如获取accessToken
 ```java
 	@Test
     public void testAccessTokenInMemory() {
