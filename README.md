@@ -23,6 +23,7 @@
         //基于redis，实现分布式锁
         ...
         WechatPSInRedisConfigImpl config = new WechatPSInRedisConfigImpl(jedisPool);
+        //WechatPSAdServiceImpl config = new WechatPSAdServiceImpl(jedisPool);
         config.setAppId("你的appid");
         config.setSecret("你的secret");
         WechatPSServiceImpl psService = new WechatPSServiceImpl();
